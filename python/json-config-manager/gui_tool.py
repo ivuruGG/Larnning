@@ -1,6 +1,5 @@
-
 import tkinter as tk
-from tkinter import messagebox, simpledialog
+from tkinter import ttk, messagebox, simpledialog
 from config_manager import ConfigManager
 from cryptography.fernet import Fernet
 
@@ -12,34 +11,51 @@ class ConfigGUI:
         self.config = config
 
         self.root.title("JSON設定ファイルマネージャー")
-        self.frame = tk.Frame(self.root)
-        self.frame.pack(pady=10)
+        self.root.geometry("600x400")
+        self.root.configure(bg="#f0f0f0")
 
-        # ボタン群
-        self.add_button = tk.Button(self.frame, text="設定を追加", command=self.add_setting)
-        self.add_button.pack(pady=5)
+        # タイトルラベル
+        title_label = tk.Label(
+            self.root,
+            text="JSON 設定ファイルマネージャー",
+            font=("Arial", 16, "bold"),
+            bg="#f0f0f0",
+            fg="#333333"
+        )
+        title_label.pack(pady=10)
 
-        self.delete_button = tk.Button(self.frame, text="設定を削除", command=self.delete_setting)
-        self.delete_button.pack(pady=5)
-
-        self.refresh_button = tk.Button(self.frame, text="設定をリロード", command=self.load_config)
-        self.refresh_button.pack(pady=5)
-
-        self.reset_button = tk.Button(self.frame, text="デフォルトにリセット", command=self.reset_settings)
-        self.reset_button.pack(pady=5)
-
-        # 設定一覧のリストボックス
-        self.listbox = tk.Listbox(self.frame, width=50, height=15)
-        self.listbox.pack(pady=10)
-
+        # 現在の設定表示
+        self.config_display = tk.Text(self.root, width=70, height=15, state="disabled", bg="#ffffff", fg="#333333")
+        self.config_display.pack(pady=10)
         self.load_config()
 
+        # ボタンフレーム
+        button_frame = tk.Frame(self.root, bg="#f0f0f0")
+        button_frame.pack(pady=10)
+
+        # ボタン配置
+        add_button = ttk.Button(button_frame, text="設定を追加", command=self.add_setting)
+        add_button.grid(row=0, column=0, padx=5, pady=5)
+
+        delete_button = ttk.Button(button_frame, text="設定を削除", command=self.delete_setting)
+        delete_button.grid(row=0, column=1, padx=5, pady=5)
+
+        reset_button = ttk.Button(button_frame, text="デフォルトにリセット", command=self.reset_settings)
+        reset_button.grid(row=0, column=2, padx=5, pady=5)
+
+        refresh_button = ttk.Button(button_frame, text="設定をリロード", command=self.load_config)
+        refresh_button.grid(row=0, column=3, padx=5, pady=5)
+
     def load_config(self):
-        self.listbox.delete(0, tk.END)
+        """現在の設定を表示"""
+        self.config_display.config(state="normal")
+        self.config_display.delete("1.0", tk.END)
         for key, value in self.config.data.items():
-            self.listbox.insert(tk.END, f"{key}: {value}")
+            self.config_display.insert(tk.END, f"{key}: {value}\n")
+        self.config_display.config(state="disabled")
 
     def add_setting(self):
+        """新しい設定を追加"""
         key = simpledialog.askstring("キー", "新しいキーを入力:")
         if not key:
             return
@@ -50,17 +66,17 @@ class ConfigGUI:
             messagebox.showinfo("情報", f"設定を追加しました: {key} = {value}")
 
     def delete_setting(self):
-        selected = self.listbox.curselection()
-        if not selected:
-            messagebox.showwarning("警告", "削除する設定を選択してください")
-            return
-        item = self.listbox.get(selected[0])
-        key = item.split(":")[0]
-        self.config.delete(key)
-        self.load_config()
-        messagebox.showinfo("情報", f"設定を削除しました: {key}")
+        """設定を削除"""
+        key = simpledialog.askstring("削除", "削除するキーを入力:")
+        if key and key in self.config.data:
+            self.config.delete(key)
+            self.load_config()
+            messagebox.showinfo("情報", f"設定を削除しました: {key}")
+        else:
+            messagebox.showwarning("警告", "指定されたキーが見つかりません")
 
     def reset_settings(self):
+        """デフォルト設定にリセット"""
         confirm = messagebox.askyesno("確認", "デフォルト設定にリセットしますか？")
         if confirm:
             self.config.reset_to_defaults()
@@ -69,7 +85,10 @@ class ConfigGUI:
 
 
 if __name__ == "__main__":
-    config = ConfigManager("config.json", default_config={"theme": "light", "notifications": True}, key=DEFAULT_KEY)
+    # デフォルト設定を指定
+    default_config = {"theme": "light", "notifications": True}
+    config = ConfigManager("config.json", default_config=default_config, key=DEFAULT_KEY)
+
     root = tk.Tk()
     app = ConfigGUI(root, config)
     root.mainloop()
