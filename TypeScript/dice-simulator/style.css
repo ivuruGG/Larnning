@@ -1,0 +1,155 @@
+/* 全体のスタイル */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 20px;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #444;
+}
+
+#container {
+  max-width: 700px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* 入力フォームとボタン */
+input, button {
+  font-size: 16px;
+  padding: 10px;
+  margin: 10px 5px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #6c9bd2;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #5887b3;
+}
+
+input[type="number"] {
+  width: 80px;
+  text-align: center;
+}
+
+/* サイコロエリア */
+#dice-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.dice {
+  width: 60px;
+  height: 60px;
+  border: 2px solid #333;
+  border-radius: 10px;
+  position: relative;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  perspective: 500px;
+}
+
+.dice-face {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 1.5em;
+  font-weight: bold;
+  visibility: hidden;
+  backface-visibility: hidden;
+  transform: rotateX(0deg);
+}
+
+.dice-face.active {
+  visibility: visible;
+}
+
+@keyframes roll {
+  0%, 100% {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+  25% {
+    transform: rotateX(90deg) rotateY(0deg);
+  }
+  50% {
+    transform: rotateX(90deg) rotateY(90deg);
+  }
+  75% {
+    transform: rotateX(0deg) rotateY(90deg);
+  }
+}
+
+.rolling {
+  animation: roll 1s infinite;
+}
+
+/* 結果エリア */
+#results {
+  margin-top: 20px;
+  font-size: 18px;
+  text-align: left;
+}
+
+#results p {
+  margin: 5px 0;
+}
+
+#results ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#results li {
+  margin: 5px 0;
+  padding: 5px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* グラフエリア */
+#chart-container {
+  margin-top: 30px;
+}
+
+canvas {
+  max-width: 100%;
+  margin: auto;
+  display: block;
+}
+
+/* メディアクエリ（モバイル対応） */
+@media (max-width: 768px) {
+  .dice {
+    width: 50px;
+    height: 50px;
+  }
+
+  input, button {
+    font-size: 14px;
+  }
+}

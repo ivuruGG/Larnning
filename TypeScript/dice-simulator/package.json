@@ -1,0 +1,36 @@
+{
+    "name": "dice-simulator",
+    "version": "1.0.0",
+    "description": "A simple dice simulator with animations, statistics, and graph visualization using TypeScript.",
+    "main": "dist/index.js",
+    "scripts": {
+        "start": "npx http-server",
+        "build": "tsc",
+        "watch": "tsc --watch",
+        "clean": "rm -rf dist",
+        "serve": "npm run build && npm start"
+    },
+    "keywords": [
+        "dice",
+        "simulator",
+        "typescript",
+        "chart.js",
+        "animation"
+    ],
+    "author": "Your Name",
+    "license": "MIT",
+    "dependencies": {
+        "chart.js": "^4.4.6"
+    },
+    "devDependencies": {
+        "typescript": "^5.0.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/your-username/dice-simulator.git"
+    },
+    "bugs": {
+        "url": "https://github.com/your-username/dice-simulator/issues"
+    },
+    "homepage": "https://github.com/your-username/dice-simulator#readme"
+}
